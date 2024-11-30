@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bets generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Roulette bets generator</h1>
+    <form id="betForm">
+        <label for="amount">Quanto vuoi puntare? (€):</label>
+        <input type="number" id="amount" min="1" required>
+        <br><br>
+
+        <label>Seleziona le opzioni di puntata:</label>
+        <div>
+            <label>
+                <input type="checkbox" id="numeriFissi" value="numeriFissi"> Numeri Fissi
+            </label>
+            <div id="numeriFissiOptions" style="display: none;">
+                <label for="numCount">Quanti numeri vuoi puntare?:</label>
+                <input type="number" id="numCount" min="1" max="36">
+            </div>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="rossoNero" value="rossoNero"> Rosso/Nero
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="pariDispari" value="pariDispari"> Pari/Dispari
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="dozzine" value="dozzine"> Le 3 Dozzine
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="colonne" value="colonne"> Le 3 Colonne
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="meta" value="meta"> Le Due Metà (1-18 o 19-36)
+            </label>
+        </div>
+        <br>
+        <button type="button" id="generateAdvice">Genera Consigli</button>
+    </form>
+    <div id="result"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
