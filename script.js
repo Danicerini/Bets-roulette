@@ -19,6 +19,6 @@ document.getElementById('dioForm').addEventListener('submit', function(e) {
     }
 
     document.getElementById('result').innerHTML = `
-        <span>Numero generato: <strong>${randomNumber}</strong></span><br>${message}
+        ${message}
     `;
 });
