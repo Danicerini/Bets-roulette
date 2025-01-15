@@ -2,25 +2,33 @@ document.getElementById('dioForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const maxNumber = parseInt(document.getElementById('maxNumber').value, 10);
+    const resultElement = document.getElementById('result');
+
     if (isNaN(maxNumber) || maxNumber <= 0) {
-        document.getElementById('result').innerText = "Inserisci un numero valido!";
+        resultElement.innerText = "Inserisci un numero valido!";
         return;
     }
 
     const randomNumber = Math.floor(Math.random() * maxNumber) + 1;
 
     let message;
-    if (randomNumber < 1000000) {
-        message = "Dio non esiste!";
-    } else if (randomNumber > 100) {
-        message = "Dio è esistito!";
-    } else if (randomNumber == 33 || randomNumber == 3){
-        message = "Incredibile, Dio esiste!!! Ed Hai vinto un bonus di 100$";
-    }else if (randomNumber == 666){
-        message = "Dio non esiste, BRAVO! digitando questo numero hai vinto 1902$";
+
+    switch (randomNumber) {
+        case 33:
+        case 3:
+            message = "Incredibile, Dio esiste!!! Ed hai vinto un bonus di 100$";
+            break;
+        case 666:
+            message = "Dio non esiste, BRAVO! Digitando questo numero hai vinto 1902$";
+            break;
+        default:
+            if (randomNumber < 1000000) {
+                message = "Dio non esiste!";
+            } else if (randomNumber > 100) {
+                message = "Dio è esistito!";
+            }
+            break;
     }
 
-    document.getElementById('result').innerHTML = `
-        ${message}
-    `;
+    resultElement.innerHTML = message;
 });
