@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stazione Meteo</title>
+    <script src="script.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4e94a0, #6cc7b8);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #444;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container-wrapper {
+            display: flex;
+            gap: 30px; /* Distanza tra i due contenitori */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 20px 70px rgba(0, 0, 0, 0.25);
+            width: 600px;
+            height: 600px; /* Altezza fissa per entrambi i contenitori */
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Per distribuire lo spazio internamente */
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #007f7f;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-right: 20px;
+            color: #007f7f;
+        }
+
+        .weather-info span {
+            font-size: 28px;
+            color: #333;
+        }
+
+        #timestamp {
+            font-size: 16px;
+            color: #777;
+            margin-top: 20px;
+            font-style: italic;
+            display: inline-block;
+            padding-top: 10px;
+            border-top: 2px solid #f1f1f1;
+        }
+
+
+        #snowflake {
+            font-size: 40px;
+            color: #00f;
+            z-index: 10;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #webcam {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 50px 40px;
+                width: 80%;
+                height: auto; /* Adattamento in caso di schermi piccoli */
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .weather-info span {
+                font-size: 24px;
+            }
+
+            #timestamp {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <div class="container">
+            <h1>Meteo Riale</h1>
+            <!-- Immagine della webcam -->
+            <img id="webcam" src="" alt="Webcam" />
+            <p><strong>Temperatura:</strong> <span id="temperature-riale">--</span></p>
+            <!-- Ultimo aggiornamento -->
+            <p>Ultimo aggiornamento: <span id="time"></span></p>
+        </div>
+
+        <div class="container">
+            <h1>Meteo Crodo:</h1>
+            <div class="weather-info">
+                <div class="icon">🌡️</div>
+                <p><strong>Temperatura:</strong> <span id="temperature" class="loading">--</span></p>
+            </div>
+            <div id="snowflake" style="display: none; position: absolute; top: 20px; right: 20px; font-size: 40px;">❄️</div>
+            <div class="weather-info">
+                <div class="icon">💧</div>
+                <p><strong>Umidità:</strong> <span id="humidity" class="loading">--</span></p>
+            </div>
+            <div>
+                <p id="timestamp" class="loading">⏰: --</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function getWebcamData() {
+            // Proxy URL per aggirare il CORS
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            
+            // URL del sito che desideri monitorare
+            const pageUrl = 'https://www.distrettolaghi.it/it/webcams/riale-centro-fondo-valle-formazza';
+            
+            // Esegui la richiesta tramite il proxy
+            const response = await fetch(proxyUrl + pageUrl);
+            const text = await response.text();
+            
+            // Usa una regex per estrarre la temperatura (adatta questa regex in base al contenuto della pagina)
+            const tempMatch = text.match(/Temperatura:\s*(\d+°C)/);
+            const temp = tempMatch ? tempMatch[1] : 'Non disponibile';
+            
+            // Mostra l'immagine della webcam e la temperatura nella tua pagina
+            const webcamUrl = 'https://lagomaggiorexperience.it/webcam/public/riale.jpg';  // Sostituisci con l'URL corretto della webcam
+            document.getElementById('webcam').src = webcamUrl;
+            document.getElementById('temperature-riale').innerText = temp;
+        }
+
+        // Carica i dati non appena la pagina è pronta
+        window.onload = getWebcamData;
+
+        // Funzione per aggiornare l'ora dell'ultimo aggiornamento
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            // Aggiorna l'ora nel primo timestamp (quello della webcam)
+            document.getElementById('time').innerText = timeString;
+        }
+
+        // Aggiorna il timestamp ogni minuto
+        setInterval(updateTime, 60000);
+        updateTime();
+    </script>
+</body>
+</html>
